@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>OpenCloud Radio — demo</title>
+<meta name="description" content="A live demo of OpenCloud Radio, an internet radio player for OpenCloud Web.">
+</head>
+<body>
+<header class="topbar">
+  <span class="app">Radio</span>
+  <span class="sep">·</span>
+  <span>OpenCloud Radio demo</span>
+  <span class="right"><a href="https://github.com/GaijinSystems/opencloud-radio">Source and install guide</a></span>
+</header>
+<div class="note" role="note">
+  <span>This is the real app on stand-in services: your station lists are kept in this browser. What leaves it is what the app asks of other sites: the streams you play, station logos, track titles, station playlists and channel lists, and online directory searches.</span>
+  <button type="button" id="reset">Start over</button>
+</div>
+<div id="app"></div>
+<script type="module" src="./main.ts"></script>
+</body>
+</html>

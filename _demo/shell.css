@@ -1,0 +1,70 @@
+:root{
+  --oc-font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --oc-role-background: #ffffff;
+  --oc-role-on-background: #191c1d;
+  --oc-role-chrome: #20434f;
+  --oc-role-on-chrome: #ffffff;
+  --oc-role-primary: #00677f;
+  --oc-role-on-primary: #ffffff;
+  --oc-role-primary-container: #b7eaff;
+  --oc-role-on-primary-container: #001f28;
+  --oc-role-secondary: #20434f;
+  --oc-role-on-secondary: #ffffff;
+  --oc-role-secondary-container: #cfe6f1;
+  --oc-role-on-secondary-container: #071e26;
+  --oc-role-tertiary: #5a5c7e;
+  --oc-role-tertiary-container: #e0e0ff;
+  --oc-role-on-tertiary-container: #171937;
+  --oc-role-error: #ba1a1a;
+  --oc-role-on-error: #ffffff;
+  --oc-role-error-container: #ffdad6;
+  --oc-role-on-error-container: #410002;
+  --oc-role-surface: #ffffff;
+  --oc-role-on-surface: #191c1d;
+  --oc-role-surface-variant: #dbe4e8;
+  --oc-role-on-surface-variant: #40484c;
+  --oc-role-outline: #70787c;
+  --oc-role-outline-variant: #bfc8cc;
+  --oc-role-surface-dim: #d8dadc;
+  --oc-role-surface-bright: #f8f9fb;
+  --oc-role-surface-container-lowest: #ffffff;
+  --oc-role-surface-container-low: #fbfcfe;
+  --oc-role-surface-container: #f6f8fa;
+  --oc-role-surface-container-high: #f2f4f5;
+  --oc-role-surface-container-highest: #eceef0;
+  --oc-role-inverse-surface: #2e3132;
+  --oc-role-inverse-on-surface: #eff1f2;
+  --oc-role-inverse-primary: #5cd5fb;
+  --shadow: 0 1px 2px rgba(0,0,0,.08), 0 2px 8px rgba(0,0,0,.04);
+}
+/* The frame: an OpenCloud-style top bar, the demo note, and the app filling the rest. */
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:var(--oc-font-family);color:var(--oc-role-on-background);background:var(--oc-role-background);
+  display:flex;flex-direction:column}
+.topbar{flex:none;display:flex;align-items:center;gap:12px;height:52px;padding:0 16px;
+  background:var(--oc-role-chrome);color:var(--oc-role-on-chrome);font-size:15px}
+.topbar .app{font-weight:600}
+.topbar .sep{opacity:.5}
+.topbar a{color:inherit}
+.topbar .right{margin-left:auto;font-size:13px;opacity:.85}
+.note{flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;padding:8px 16px;font-size:13px;
+  background:var(--oc-role-secondary-container);color:var(--oc-role-on-secondary-container)}
+.note button{font:inherit;font-size:12.5px;padding:3px 10px;border-radius:4px;cursor:pointer;
+  border:1px solid currentColor;background:transparent;color:inherit}
+#app{flex:1;min-height:0;display:flex}
+#app > *{flex:1;min-width:0}
+
+/* The design system's button, as the app uses it: filled, outline, raw. */
+.oc-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;font:inherit;font-size:13.5px;
+  line-height:1.2;padding:7px 14px;border-radius:6px;cursor:pointer;border:1px solid transparent;
+  background:transparent;color:var(--oc-role-on-surface)}
+.oc-button:disabled{opacity:.45;cursor:default}
+.oc-button:focus-visible{outline:2px solid var(--oc-role-primary);outline-offset:2px}
+.oc-button-filled{background:var(--oc-role-secondary);color:var(--oc-role-on-secondary)}
+.oc-button-filled.oc-button-primary{background:var(--oc-role-primary);color:var(--oc-role-on-primary)}
+.oc-button-outline{border-color:var(--oc-role-outline);color:var(--oc-role-on-surface)}
+.oc-button-outline.oc-button-primary{border-color:var(--oc-role-primary);color:var(--oc-role-primary)}
+.oc-button-outline:hover:not(:disabled){background:var(--oc-role-surface-container)}
+.oc-button-raw{padding:4px 6px;color:inherit}
+.oc-button-raw:hover:not(:disabled){background:var(--oc-role-surface-container)}
