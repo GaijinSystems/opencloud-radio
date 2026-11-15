@@ -1,0 +1,105 @@
+# OpenCloud Radio — Content Security Policy
+#
+# Radio plays audio from third-party hosts, so the policy must allow
+#     media-src https:
+# OpenCloud ships with `media-src: 'self'`, which blocks every station. The
+# symptom is that the app works, stations save, and nothing ever plays.
+#
+# Playing a station is a request from each listener's browser to its host,
+# which learns the listener's address and the cloud's address (the browser's
+# Referer, and the Origin header where the stream is read for the spectrum), as
+# with any audio a web page plays. Read for the spectrum, it carries no
+# cookies; a plain load carries any the browser holds for that host, as any
+# web page's audio does.
+#
+# The policy comes from OpenCloud's own PROXY service, not from your reverse
+# proxy, and is configured with a yaml file:
+#
+#   PROXY_CSP_CONFIG_FILE_LOCATION           merged with the built-in default
+#   PROXY_CSP_CONFIG_FILE_OVERRIDE_LOCATION  REPLACES the default entirely
+#
+# Use the first one. The merge is a deep merge and lists are combined
+# uniquely, so a file containing only the lines below adds `https:` to
+# media-src and leaves every other directive — including the ones your identity
+# provider and office integration need — exactly as they were.
+#
+# If you already have a csp.yaml, add the media-src block to it instead of
+# pointing the variable at this file.
+#
+# A restart of the proxy service (or the deployment) is required. Then verify
+# in a PRIVATE WINDOW: the old policy is cached with the document, so an open
+# tab keeps failing after the fix.
+#
+#   curl -sI https://cloud.example.org/ | grep -io "media-src[^;]*"
+
+directives:
+  media-src:
+    - "'self'"
+    - 'https:'
+
+  # Optional, and only if you want these features:
+  #
+  # These apply to the whole instance, not to Radio alone. Each says what it
+  # gives up.
+  #
+  # Station logos (showLogos, on by default) — without this, logos silently
+  # fall back to initials. With it, any page of the instance may load an image
+  # from any https host, so a station list someone shares can tell the hosts of
+  # its logos when it is opened, and from where:
+  #
+  # img-src:
+  #   - 'https:'
+  #
+  # connect-src: what the app reads from other hosts. This file is merged into
+  # OpenCloud's own policy (see the top), so list only what you add; its own
+  # entries stay. A YAML mapping may hold `connect-src` only ONCE, so whatever
+  # you need from the entries below goes into one block:
+  #
+  # - Online directory search (directoryEnabled, off by default):
+  #     'https://*.api.radio-browser.info'
+  # - Find backup servers, and a station address given as a playlist link,
+  #   read the station's playlist from its host; for SomaFM and StreamTheWorld:
+  #     'https://somafm.com', 'https://*.somafm.com',
+  #     'https://playerservices.streamtheworld.com'
+  #   Any other station's playlist — its own, or one the directory names —
+  #   is on its own host, and needs `https:` (below).
+  #
+  # For both, for example:
+  #
+  # connect-src:
+  #   - 'https://*.api.radio-browser.info'
+  #   - 'https://somafm.com'
+  #   - 'https://*.somafm.com'
+  #   - 'https://playerservices.streamtheworld.com'
+  #
+  # Track titles (metadataEnabled, on by default) — the app asks each station
+  # for its titles (its now-playing address, its hosting service's, its status
+  # page, or a brief read of the stream itself), and stations are arbitrary hosts, so this needs
+  # connect-src open to ALL of https. That removes the policy as a barrier to
+  # sending data out, for every app on the instance and for anything that ever
+  # manages to run in it. Titles come from many hosts (the stations, AzuraCast,
+  # Radio.co, Triton, Zeno.FM, NPR), so no short list would do. Until you add
+  # it, titles show only for stations relayed under the cloud's own hostname
+  # and those on hosts already allowed here (SomaFM's, with the entries above);
+  # leave it out unless you have weighed that, or set metadataEnabled: false.
+  # It also covers every named entry above, so with it the one block is:
+  #
+  # connect-src:
+  #   - 'https:'
+  #
+  # Each listener's address and listening times then reach the hosts titles
+  # come from, as they already reach the stream's own host, with the cloud's
+  # address (the Origin header) and the browser's usual headers; no cookies,
+  # and no referrer on these requests.
+  #
+  # Stations you relay under the cloud's own hostname need none of this: their
+  # titles are read from the cloud itself. A relay on a hostname of its own
+  # (INSTALL.md §2b) does need its host here for titles, unless `https:` is
+  # already there; add it to the one block, e.g. with the directory:
+  #
+  # connect-src:
+  #   - 'https://*.api.radio-browser.info'
+  #   - 'https://radio-relay.example.org'
+  #
+  # Verify with deploy/directory-check.html, opened from your own origin —
+  # curl cannot test a Content Security Policy.

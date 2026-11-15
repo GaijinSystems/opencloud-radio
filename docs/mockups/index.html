@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenCloud Radio — layout mockups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --oc-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --oc-role-background: #ffffff;
+  --oc-role-on-background: #191c1d;
+  --oc-role-chrome: #20434f;
+  --oc-role-on-chrome: #ffffff;
+  --oc-role-primary: #00677f;
+  --oc-role-on-primary: #ffffff;
+  --oc-role-primary-container: #b7eaff;
+  --oc-role-on-primary-container: #001f28;
+  --oc-role-secondary: #20434f;
+  --oc-role-on-secondary: #ffffff;
+  --oc-role-secondary-container: #cfe6f1;
+  --oc-role-on-secondary-container: #071e26;
+  --oc-role-tertiary: #5a5c7e;
+  --oc-role-tertiary-container: #e0e0ff;
+  --oc-role-on-tertiary-container: #171937;
+  --oc-role-error: #ba1a1a;
+  --oc-role-on-error: #ffffff;
+  --oc-role-error-container: #ffdad6;
+  --oc-role-on-error-container: #410002;
+  --oc-role-surface: #ffffff;
+  --oc-role-on-surface: #191c1d;
+  --oc-role-surface-variant: #dbe4e8;
+  --oc-role-on-surface-variant: #40484c;
+  --oc-role-outline: #70787c;
+  --oc-role-outline-variant: #bfc8cc;
+  --oc-role-surface-dim: #d8dadc;
+  --oc-role-surface-bright: #f8f9fb;
+  --oc-role-surface-container-lowest: #ffffff;
+  --oc-role-surface-container-low: #fbfcfe;
+  --oc-role-surface-container: #f6f8fa;
+  --oc-role-surface-container-high: #f2f4f5;
+  --oc-role-surface-container-highest: #eceef0;
+  --oc-role-inverse-surface: #2e3132;
+  --oc-role-inverse-on-surface: #eff1f2;
+  --oc-role-inverse-primary: #5cd5fb;
+  --shadow: 0 1px 2px rgba(0,0,0,.08), 0 2px 8px rgba(0,0,0,.04);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --oc-role-background: #191c1d;
+  --oc-role-on-background: #e1e3e4;
+  --oc-role-chrome: #20434f;
+  --oc-role-on-chrome: #ffffff;
+  --oc-role-primary: #5cd5fb;
+  --oc-role-on-primary: #003543;
+  --oc-role-primary-container: #004e60;
+  --oc-role-on-primary-container: #b7eaff;
+  --oc-role-secondary: #b3cad4;
+  --oc-role-on-secondary: #1e333b;
+  --oc-role-secondary-container: #344a52;
+  --oc-role-on-secondary-container: #cfe6f1;
+  --oc-role-tertiary: #c3c3eb;
+  --oc-role-tertiary-container: #424465;
+  --oc-role-on-tertiary-container: #e0e0ff;
+  --oc-role-error: #ffb4ab;
+  --oc-role-on-error: #690005;
+  --oc-role-error-container: #93000a;
+  --oc-role-on-error-container: #ffb4ab;
+  --oc-role-surface: #191c1d;
+  --oc-role-on-surface: #e1e3e4;
+  --oc-role-surface-variant: #40484c;
+  --oc-role-on-surface-variant: #bfc8cc;
+  --oc-role-outline: #8a9296;
+  --oc-role-outline-variant: #40484c;
+  --oc-role-surface-dim: #111415;
+  --oc-role-surface-bright: #373a3b;
+  --oc-role-surface-container-lowest: #0c0f10;
+  --oc-role-surface-container-low: #191c1d;
+  --oc-role-surface-container: #1d2021;
+  --oc-role-surface-container-high: #272a2c;
+  --oc-role-surface-container-highest: #323537;
+  --oc-role-inverse-surface: #e1e3e4;
+  --oc-role-inverse-on-surface: #2e3132;
+  --oc-role-inverse-primary: #00677f;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 2px 10px rgba(0,0,0,.25);
+}}
+:root[data-theme="dark"]{
+  --oc-role-background: #191c1d;
+  --oc-role-on-background: #e1e3e4;
+  --oc-role-chrome: #20434f;
+  --oc-role-on-chrome: #ffffff;
+  --oc-role-primary: #5cd5fb;
+  --oc-role-on-primary: #003543;
+  --oc-role-primary-container: #004e60;
+  --oc-role-on-primary-container: #b7eaff;
+  --oc-role-secondary: #b3cad4;
+  --oc-role-on-secondary: #1e333b;
+  --oc-role-secondary-container: #344a52;
+  --oc-role-on-secondary-container: #cfe6f1;
+  --oc-role-tertiary: #c3c3eb;
+  --oc-role-tertiary-container: #424465;
+  --oc-role-on-tertiary-container: #e0e0ff;
+  --oc-role-error: #ffb4ab;
+  --oc-role-on-error: #690005;
+  --oc-role-error-container: #93000a;
+  --oc-role-on-error-container: #ffb4ab;
+  --oc-role-surface: #191c1d;
+  --oc-role-on-surface: #e1e3e4;
+  --oc-role-surface-variant: #40484c;
+  --oc-role-on-surface-variant: #bfc8cc;
+  --oc-role-outline: #8a9296;
+  --oc-role-outline-variant: #40484c;
+  --oc-role-surface-dim: #111415;
+  --oc-role-surface-bright: #373a3b;
+  --oc-role-surface-container-lowest: #0c0f10;
+  --oc-role-surface-container-low: #191c1d;
+  --oc-role-surface-container: #1d2021;
+  --oc-role-surface-container-high: #272a2c;
+  --oc-role-surface-container-highest: #323537;
+  --oc-role-inverse-surface: #e1e3e4;
+  --oc-role-inverse-on-surface: #2e3132;
+  --oc-role-inverse-primary: #00677f;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 2px 10px rgba(0,0,0,.25);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;font-family:var(--oc-font-family);font-size:14px;line-height:1.45;
+  background:var(--oc-role-background);color:var(--oc-role-on-background);
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input,select{font:inherit;color:inherit}
+svg{display:block;flex:none}
+:focus-visible{outline:2px solid var(--oc-role-primary);outline-offset:2px;border-radius:4px}
+.sh{display:flex;flex-direction:column;height:100vh;min-height:0}
+.sh-top{
+  height:48px;flex:none;display:flex;align-items:center;gap:12px;padding:0 12px;
+  background:var(--oc-role-chrome);color:var(--oc-role-on-chrome);
+}
+.sh-top .brand{display:flex;align-items:center;gap:9px;font-weight:600;letter-spacing:.1px}
+.sh-top .spacer{flex:1}
+.sh-top .av{
+  width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.22);
+  display:grid;place-items:center;font-size:11px;font-weight:600
+}
+.sh-body{flex:1;display:flex;min-height:0}
+.sh-rail{
+  width:60px;flex:none;background:var(--oc-role-surface-container-low);
+  border-right:1px solid var(--oc-role-outline-variant);
+  display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:10px;
+}
+.sh-rail a{
+  width:44px;height:44px;border-radius:8px;display:grid;place-items:center;
+  color:var(--oc-role-on-surface-variant);text-decoration:none
+}
+.sh-rail a.on{background:var(--oc-role-secondary-container);color:var(--oc-role-on-secondary-container)}
+.app{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;background:var(--oc-role-background)}
+.tt{
+  position:fixed;right:12px;bottom:12px;z-index:50;display:flex;gap:2px;padding:3px;
+  border-radius:999px;background:var(--oc-role-surface-container-high);
+  border:1px solid var(--oc-role-outline-variant);box-shadow:var(--shadow);font-size:11px
+}
+.tt button{padding:4px 10px;border-radius:999px;color:var(--oc-role-on-surface-variant)}
+.tt button[aria-pressed=true]{background:var(--oc-role-secondary-container);color:var(--oc-role-on-secondary-container)}
+.btn{
+  display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:6px;
+  border:1px solid var(--oc-role-outline-variant);color:var(--oc-role-on-surface);
+  background:var(--oc-role-surface-container-low)
+}
+.btn:hover{background:var(--oc-role-surface-container-high)}
+.btn.pri{background:var(--oc-role-primary);color:var(--oc-role-on-primary);border-color:transparent}
+.btn.pri:hover{filter:brightness(1.06)}
+.btn.q{border-color:transparent;background:none}
+.btn.q:hover{background:var(--oc-role-surface-container-high)}
+.play{
+  width:36px;height:36px;border-radius:50%;display:grid;place-items:center;flex:none;
+  background:var(--oc-role-primary);color:var(--oc-role-on-primary)
+}
+.play.big{width:56px;height:56px}
+.play.ghost{background:var(--oc-role-surface-container-high);color:var(--oc-role-on-surface)}
+.mono{font-variant-numeric:tabular-nums}
+.dim{color:var(--oc-role-on-surface-variant)}
+.badge{
+  display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:999px;
+  font-size:11.5px;white-space:nowrap;border:1px solid transparent
+}
+.badge.live{background:var(--oc-role-primary-container);color:var(--oc-role-on-primary-container)}
+.badge.ok{border-color:var(--oc-role-outline-variant);color:var(--oc-role-on-surface-variant)}
+.badge.new{color:var(--oc-role-on-surface-variant);opacity:.75}
+.badge.bad{background:var(--oc-role-error-container);color:var(--oc-role-on-error-container)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+.logo{
+  width:34px;height:34px;border-radius:6px;flex:none;display:grid;place-items:center;
+  font-weight:600;font-size:13px;letter-spacing:-.2px;
+  background:var(--oc-role-surface-container-highest);color:var(--oc-role-on-surface-variant)
+}
+.logo.lg{width:56px;height:56px;border-radius:10px;font-size:19px}
+.logo.xl{width:104px;height:104px;border-radius:14px;font-size:34px}
+.sep{height:1px;background:var(--oc-role-outline-variant);border:0;margin:0}
+.scroll{overflow:auto;min-height:0}
+.scroll::-webkit-scrollbar{width:10px;height:10px}
+.scroll::-webkit-scrollbar-thumb{background:var(--oc-role-outline-variant);border-radius:6px;border:3px solid transparent;background-clip:content-box}
+.vol{display:flex;align-items:center;gap:8px;color:var(--oc-role-on-surface-variant)}
+.vol input{width:88px;accent-color:var(--oc-role-primary)}
+.note{
+  display:flex;gap:8px;padding:9px 12px;border-radius:8px;font-size:12.5px;
+  background:var(--oc-role-error-container);color:var(--oc-role-on-error-container)
+}
+.eq{display:flex;align-items:flex-end;gap:2px;height:14px}
+.eq i{width:3px;border-radius:1px;background:currentColor;transform-origin:bottom;animation:eq .9s ease-in-out infinite alternate}
+.eq i:nth-child(1){height:40%;animation-delay:-.1s}
+.eq i:nth-child(2){height:95%;animation-delay:-.45s}
+.eq i:nth-child(3){height:60%;animation-delay:-.3s}
+.eq i:nth-child(4){height:80%;animation-delay:-.6s}
+@keyframes eq{from{transform:scaleY(.35)}to{transform:scaleY(1)}}
+@media (prefers-reduced-motion:reduce){.eq i{animation:none}}
+
+body{overflow:auto}
+.page{max-width:1180px;margin:0 auto;padding:40px 24px 80px}
+header.intro{max-width:64ch;margin-bottom:40px}
+h1{margin:0 0 10px;font-size:30px;font-weight:700;letter-spacing:-.5px}
+.lede{font-size:16px;color:var(--oc-role-on-surface-variant);margin:0 0 14px}
+.meta{font-size:13px;color:var(--oc-role-on-surface-variant)}
+.card{display:grid;grid-template-columns:minmax(0,480px) minmax(0,1fr);gap:28px;
+  padding:26px 0;border-top:1px solid var(--oc-role-outline-variant);align-items:start}
+.card:last-of-type{border-bottom:1px solid var(--oc-role-outline-variant)}
+.frame{position:relative;border-radius:10px;overflow:hidden;
+  border:1px solid var(--oc-role-outline-variant);background:var(--oc-role-surface-container-low);
+  aspect-ratio:16/10}
+.frame iframe{position:absolute;top:0;left:0;width:1440px;height:900px;border:0;
+  transform:scale(.3333);transform-origin:0 0;pointer-events:none}
+.hit{position:absolute;inset:0}
+.hit:hover{box-shadow:inset 0 0 0 2px var(--oc-role-primary)}
+.txt h2{margin:0 0 8px;font-size:19px;font-weight:600;display:flex;align-items:baseline;gap:10px}
+.num{font-size:13px;color:var(--oc-role-on-surface-variant);font-weight:500}
+.sum{margin:0 0 14px;max-width:56ch}
+dl{display:grid;grid-template-columns:110px 1fr;gap:8px 14px;margin:0 0 18px;font-size:13.5px;
+  max-width:62ch}
+dt{color:var(--oc-role-on-surface-variant)}
+dd{margin:0}
+a.btn{text-decoration:none}
+footer{margin-top:40px;font-size:13px;color:var(--oc-role-on-surface-variant);max-width:70ch}
+@media (max-width:860px){.card{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="intro">
+  <h1>OpenCloud Radio — layouts</h1>
+  <p class="lede">Ten directions for the internet radio player, and a tuned version of the first
+    (11), the one it implements. Same content and the same OpenCloud colour roles in every one, so the
+    only variable is the layout.</p>
+  <p class="meta">Colours are the real light and dark role tokens from the OpenCloud design
+    system and server theme, so these should sit correctly next to Files. Every mockup follows
+    the system theme and carries a Light / Dark / System switch in the bottom right. Where a
+    spectrum analyser appears it is drawn as a placeholder in 04 and 09, the two that reserve
+    real space for it; 11 draws it.</p>
+</header>
+<article class="card">
+  <div class="frame"><iframe src="01-three-pane.html" title="Three pane preview" loading="lazy"
+    tabindex="-1" scrolling="no"></iframe>
+    <a class="hit" href="01-three-pane.html" target="_blank" rel="noopener"
+      aria-label="Open Three pane full size"></a></div>
+  <div class="txt">
+    <h2><span class="num mono">01</span> Three pane</h2>
+    <p class="sum">Lists on the left, a station table in the middle, a player bar along the bottom.</p>
+    <dl><dt>Works because</dt><dd>Reads as a native OpenCloud screen and needs no explanation. The list rail is always visible, so moving between lists is one click.</dd>
+        <dt>Costs you</dt><dd>The least distinctive of the ten. The table gives each station the same weight, which makes a 60-station list hard to scan.</dd></dl>
+    <a class="btn" href="01-three-pane.html" target="_blank" rel="noopener">Open full size</a>
+  </div>
+</article>
+<article class="card">
+  <div class="frame"><iframe src="02-files-native.html" title="Files-native with details panel preview" loading="lazy"
+    tabindex="-1" scrolling="no"></iframe>
+    <a class="hit" href="02-files-native.html" target="_blank" rel="noopener"
+      aria-label="Open Files-native with details panel full size"></a></div>
+  <div class="txt">
+    <h2><span class="num mono">02</span> Files-native with details panel</h2>
+    <p class="sum">Breadcrumb, row list and a right-hand details panel, borrowing the Files layout directly.</p>
+    <dl><dt>Works because</dt><dd>Users already know this shape. The details panel is the natural home for the stream address, format and last-played time without a modal.</dd>
+        <dt>Costs you</dt><dd>Two side panels plus a player bar leaves a narrow middle column on small screens. The breadcrumb implies folder navigation the app does not actually offer.</dd></dl>
+    <a class="btn" href="02-files-native.html" target="_blank" rel="noopener">Open full size</a>
+  </div>
+</article>
+<article class="card">
+  <div class="frame"><iframe src="03-tile-wall.html" title="Tile wall preview" loading="lazy"
+    tabindex="-1" scrolling="no"></iframe>
+    <a class="hit" href="03-tile-wall.html" target="_blank" rel="noopener"
+      aria-label="Open Tile wall full size"></a></div>
+  <div class="txt">
+    <h2><span class="num mono">03</span> Tile wall</h2>
+    <p class="sum">Stations as cards in a responsive grid, with group filters as chips above.</p>
+    <dl><dt>Works because</dt><dd>Logos carry recognition better than text, and the grid reflows to any width without a separate mobile design.</dd>
+        <dt>Costs you</dt><dd>Low density — about twelve stations per screen against forty in the table layouts. Without logos the tiles are mostly empty space.</dd></dl>
+    <a class="btn" href="03-tile-wall.html" target="_blank" rel="noopener">Open full size</a>
+  </div>
+</article>
+<article class="card">
+  <div class="frame"><iframe src="04-tuner.html" title="Tuner preview" loading="lazy"
+    tabindex="-1" scrolling="no"></iframe>
+    <a class="hit" href="04-tuner.html" target="_blank" rel="noopener"
+      aria-label="Open Tuner full size"></a></div>
+  <div class="txt">
+    <h2><span class="num mono">04</span> Tuner</h2>
+    <p class="sum">A now-playing stage over a horizontal band of stations, with tick marks suggesting a dial.</p>
+    <dl><dt>Works because</dt><dd>The only layout with a point of view about what radio is. The stage has room for the spectrum analyser without redesigning anything.</dd>
+        <dt>Costs you</dt><dd>Horizontal scrolling hides stations and is awkward with a keyboard. The dial metaphor stops paying off past about twenty stations.</dd></dl>
+    <a class="btn" href="04-tuner.html" target="_blank" rel="noopener">Open full size</a>
+  </div>
+</article>
+<article class="card">
+  <div class="frame"><iframe src="05-hero-column.html" title="Hero and column preview" loading="lazy"
+    tabindex="-1" scrolling="no"></iframe>
+    <a class="hit" href="05-hero-column.html" target="_blank" rel="noopener"
+      aria-label="Open Hero and column full size"></a></div>
+  <div class="txt">
+    <h2><span class="num mono">05</span> Hero and column</h2>
+    <p class="sum">A large now-playing panel with the station list as a narrow column on the right.</p>
+    <dl><dt>Works because</dt><dd>Puts the thing that is actually happening at the centre. Calm, and it works well as a screen left open on a second monitor.</dd>
+        <dt>Costs you</dt><dd>Editing and reordering have nowhere to live, so both need a modal. Half the screen is given to four lines of text.</dd></dl>
+    <a class="btn" href="05-hero-column.html" target="_blank" rel="noopener">Open full size</a>
+  </div>
+</article>
+<article class="card">
+  <div class="frame"><iframe src="06-dense-table.html" title="Dense table preview" loading="lazy"
+    tabindex="-1" scrolling="no"></iframe>
+    <a class="hit" href="06-dense-table.html" target="_blank" rel="noopener"
+      aria-label="Open Dense table full size"></a></div>
+  <div class="txt">
+    <h2><span class="num mono">06</span> Dense table</h2>
+    <p class="sum">Full-width data table with the stream address visible, a docked player, keyboard hints.</p>
+    <dl><dt>Works because</dt><dd>Highest density of the ten and the only one that shows the stream URL in the list, which is what you need when a station stops working. Tabs replace the rail and reclaim the width.</dd>
+        <dt>Costs you</dt><dd>It looks like a database table rather than a music player. The URL column pushes the minimum comfortable width up.</dd></dl>
+    <a class="btn" href="06-dense-table.html" target="_blank" rel="noopener">Open full size</a>
+  </div>
+</article>
+<article class="card">
+  <div class="frame"><iframe src="07-master-detail.html" title="Master and detail editor preview" loading="lazy"
+    tabindex="-1" scrolling="no"></iframe>
+    <a class="hit" href="07-master-detail.html" target="_blank" rel="noopener"
+      aria-label="Open Master and detail editor full size"></a></div>
+  <div class="txt">
+    <h2><span class="num mono">07</span> Master and detail editor</h2>
+    <p class="sum">Station list on the left, a full editing form on the right, shown here in an error state.</p>
+    <dl><dt>Works because</dt><dd>Adding and fixing stations is the work this app actually involves, and this is the only layout that treats it as a first-class screen rather than a modal. Blocked-station explanations have room to be useful.</dd>
+        <dt>Costs you</dt><dd>The detail pane is mostly empty when you are only listening. Optimises for the setup task over the everyday one.</dd></dl>
+    <a class="btn" href="07-master-detail.html" target="_blank" rel="noopener">Open full size</a>
+  </div>
+</article>
+<article class="card">
+  <div class="frame"><iframe src="08-search-first.html" title="Search first preview" loading="lazy"
+    tabindex="-1" scrolling="no"></iframe>
+    <a class="hit" href="08-search-first.html" target="_blank" rel="noopener"
+      aria-label="Open Search first full size"></a></div>
+  <div class="txt">
+    <h2><span class="num mono">08</span> Search first</h2>
+    <p class="sum">One search field over everything, with a small floating player card.</p>
+    <dl><dt>Works because</dt><dd>Scales past a thousand stations without a scrollbar, and the same field accepts a pasted stream address, so adding a station and finding one are the same gesture.</dd>
+        <dt>Costs you</dt><dd>Nothing is visible until you type, which hides the library and makes browsing impossible. Reordering a list has no home here at all.</dd></dl>
+    <a class="btn" href="08-search-first.html" target="_blank" rel="noopener">Open full size</a>
+  </div>
+</article>
+<article class="card">
+  <div class="frame"><iframe src="09-console.html" title="Console preview" loading="lazy"
+    tabindex="-1" scrolling="no"></iframe>
+    <a class="hit" href="09-console.html" target="_blank" rel="noopener"
+      aria-label="Open Console full size"></a></div>
+  <div class="txt">
+    <h2><span class="num mono">09</span> Console</h2>
+    <p class="sum">A player console strip across the top with a dedicated analyser panel, two list panes below.</p>
+    <dl><dt>Works because</dt><dd>Designs the spectrum in from the start rather than bolting it on, and two visible lists make dragging a station between them possible.</dd>
+        <dt>Costs you</dt><dd>The console takes a fixed 170 px of height whether or not anything is playing. Two panes need real width to work.</dd></dl>
+    <a class="btn" href="09-console.html" target="_blank" rel="noopener">Open full size</a>
+  </div>
+</article>
+<article class="card">
+  <div class="frame"><iframe src="10-narrow.html" title="Narrow and touch preview" loading="lazy"
+    tabindex="-1" scrolling="no"></iframe>
+    <a class="hit" href="10-narrow.html" target="_blank" rel="noopener"
+      aria-label="Open Narrow and touch full size"></a></div>
+  <div class="txt">
+    <h2><span class="num mono">10</span> Narrow and touch</h2>
+    <p class="sum">The single-column layout at phone width, with a bottom sheet player and a floating add button.</p>
+    <dl><dt>Works because</dt><dd>The only one that answers what happens below about 700 px, which every other layout still needs. Large touch targets, one-handed transport controls.</dd>
+        <dt>Costs you</dt><dd>Not a desktop design — this is the companion to whichever of the others is chosen, not an alternative to them.</dd></dl>
+    <a class="btn" href="10-narrow.html" target="_blank" rel="noopener">Open full size</a>
+  </div>
+</article>
+<article class="card">
+  <div class="frame"><iframe src="11-three-pane-tuned.html" title="Three pane, tuned preview" loading="lazy"
+    tabindex="-1" scrolling="no"></iframe>
+    <a class="hit" href="11-three-pane-tuned.html" target="_blank" rel="noopener"
+      aria-label="Open Three pane, tuned full size"></a></div>
+  <div class="txt">
+    <h2><span class="num mono">11</span> Three pane, tuned</h2>
+    <p class="sum">Mockup 01 with a resizable list divider, a columns preference, and a taller player carrying the spectrum above the transport row.</p>
+    <dl><dt>Works because</dt><dd>The divider defaults to 268 px, which fits the longest list name without truncation, clamps to 208-520 px, and stores the value in localStorage. Drag it, arrow-key it, or double-click to reset. The analyser strip is 84 px, one and a half times the 56 px transport row below it. Visible columns — including the full stream address — are chosen from the Columns menu and stored per device. Theme follows the OpenCloud setting unless it is overridden in the switch.</dd>
+        <dt>Costs you</dt><dd>The player now takes 141 px of vertical space whether or not anything is playing, which is about three station rows.</dd></dl>
+    <a class="btn" href="11-three-pane-tuned.html" target="_blank" rel="noopener">Open full size</a>
+  </div>
+</article>
+<footer>
+  <p>Previews are scaled to a third. Click one to open it at full size, then resize the window —
+    every layout has a responsive story except 10, which is the narrow-width answer for whichever
+    of the others is chosen.</p>
+</footer>
+</div>
+
+<div class="tt" role="group" aria-label="Theme">
+  <button data-mode="light" aria-pressed="false">Light</button>
+  <button data-mode="dark" aria-pressed="false">Dark</button>
+  <button data-mode="system" aria-pressed="true">System</button>
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  var q=new URLSearchParams(location.search).get('theme');
+  if(q==='dark'||q==='light')root.setAttribute('data-theme',q);
+  document.querySelectorAll('.tt button').forEach(function(b){
+    b.addEventListener('click',function(){
+      var m=b.dataset.mode;
+      if(m==='system')root.removeAttribute('data-theme');else root.setAttribute('data-theme',m);
+      document.querySelectorAll('.tt button').forEach(function(o){
+        o.setAttribute('aria-pressed',String(o.dataset.mode===m));
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>

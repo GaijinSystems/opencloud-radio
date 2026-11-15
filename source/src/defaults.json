@@ -1,0 +1,21 @@
+{
+  "rootFolder": "Radio",
+  "settingsFolder": "Settings",
+  "backupFolder": "Backups",
+  "backupKeep": 5,
+  "defaultStations": [],
+  "reconnectAttempts": 5,
+  "reconnectMaxDelayMs": 16000,
+  "cacheBustOnReconnect": false,
+  "metadataEnabled": true,
+  "analyserEnabled": true,
+  "showLogos": true,
+  "maxPlaylistDepth": 2,
+  "maxStationsPerList": 2000,
+  "directoryEnabled": false,
+  "directoryServers": [],
+  "directoryReportClicks": false,
+  "directoryPageSize": 50,
+  "directoryMaxResults": 500,
+  "relays": {}
+}

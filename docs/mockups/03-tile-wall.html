@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tile wall — OpenCloud Radio mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --oc-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --oc-role-background: #ffffff;
+  --oc-role-on-background: #191c1d;
+  --oc-role-chrome: #20434f;
+  --oc-role-on-chrome: #ffffff;
+  --oc-role-primary: #00677f;
+  --oc-role-on-primary: #ffffff;
+  --oc-role-primary-container: #b7eaff;
+  --oc-role-on-primary-container: #001f28;
+  --oc-role-secondary: #20434f;
+  --oc-role-on-secondary: #ffffff;
+  --oc-role-secondary-container: #cfe6f1;
+  --oc-role-on-secondary-container: #071e26;
+  --oc-role-tertiary: #5a5c7e;
+  --oc-role-tertiary-container: #e0e0ff;
+  --oc-role-on-tertiary-container: #171937;
+  --oc-role-error: #ba1a1a;
+  --oc-role-on-error: #ffffff;
+  --oc-role-error-container: #ffdad6;
+  --oc-role-on-error-container: #410002;
+  --oc-role-surface: #ffffff;
+  --oc-role-on-surface: #191c1d;
+  --oc-role-surface-variant: #dbe4e8;
+  --oc-role-on-surface-variant: #40484c;
+  --oc-role-outline: #70787c;
+  --oc-role-outline-variant: #bfc8cc;
+  --oc-role-surface-dim: #d8dadc;
+  --oc-role-surface-bright: #f8f9fb;
+  --oc-role-surface-container-lowest: #ffffff;
+  --oc-role-surface-container-low: #fbfcfe;
+  --oc-role-surface-container: #f6f8fa;
+  --oc-role-surface-container-high: #f2f4f5;
+  --oc-role-surface-container-highest: #eceef0;
+  --oc-role-inverse-surface: #2e3132;
+  --oc-role-inverse-on-surface: #eff1f2;
+  --oc-role-inverse-primary: #5cd5fb;
+  --shadow: 0 1px 2px rgba(0,0,0,.08), 0 2px 8px rgba(0,0,0,.04);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --oc-role-background: #191c1d;
+  --oc-role-on-background: #e1e3e4;
+  --oc-role-chrome: #20434f;
+  --oc-role-on-chrome: #ffffff;
+  --oc-role-primary: #5cd5fb;
+  --oc-role-on-primary: #003543;
+  --oc-role-primary-container: #004e60;
+  --oc-role-on-primary-container: #b7eaff;
+  --oc-role-secondary: #b3cad4;
+  --oc-role-on-secondary: #1e333b;
+  --oc-role-secondary-container: #344a52;
+  --oc-role-on-secondary-container: #cfe6f1;
+  --oc-role-tertiary: #c3c3eb;
+  --oc-role-tertiary-container: #424465;
+  --oc-role-on-tertiary-container: #e0e0ff;
+  --oc-role-error: #ffb4ab;
+  --oc-role-on-error: #690005;
+  --oc-role-error-container: #93000a;
+  --oc-role-on-error-container: #ffb4ab;
+  --oc-role-surface: #191c1d;
+  --oc-role-on-surface: #e1e3e4;
+  --oc-role-surface-variant: #40484c;
+  --oc-role-on-surface-variant: #bfc8cc;
+  --oc-role-outline: #8a9296;
+  --oc-role-outline-variant: #40484c;
+  --oc-role-surface-dim: #111415;
+  --oc-role-surface-bright: #373a3b;
+  --oc-role-surface-container-lowest: #0c0f10;
+  --oc-role-surface-container-low: #191c1d;
+  --oc-role-surface-container: #1d2021;
+  --oc-role-surface-container-high: #272a2c;
+  --oc-role-surface-container-highest: #323537;
+  --oc-role-inverse-surface: #e1e3e4;
+  --oc-role-inverse-on-surface: #2e3132;
+  --oc-role-inverse-primary: #00677f;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 2px 10px rgba(0,0,0,.25);
+}}
+:root[data-theme="dark"]{
+  --oc-role-background: #191c1d;
+  --oc-role-on-background: #e1e3e4;
+  --oc-role-chrome: #20434f;
+  --oc-role-on-chrome: #ffffff;
+  --oc-role-primary: #5cd5fb;
+  --oc-role-on-primary: #003543;
+  --oc-role-primary-container: #004e60;
+  --oc-role-on-primary-container: #b7eaff;
+  --oc-role-secondary: #b3cad4;
+  --oc-role-on-secondary: #1e333b;
+  --oc-role-secondary-container: #344a52;
+  --oc-role-on-secondary-container: #cfe6f1;
+  --oc-role-tertiary: #c3c3eb;
+  --oc-role-tertiary-container: #424465;
+  --oc-role-on-tertiary-container: #e0e0ff;
+  --oc-role-error: #ffb4ab;
+  --oc-role-on-error: #690005;
+  --oc-role-error-container: #93000a;
+  --oc-role-on-error-container: #ffb4ab;
+  --oc-role-surface: #191c1d;
+  --oc-role-on-surface: #e1e3e4;
+  --oc-role-surface-variant: #40484c;
+  --oc-role-on-surface-variant: #bfc8cc;
+  --oc-role-outline: #8a9296;
+  --oc-role-outline-variant: #40484c;
+  --oc-role-surface-dim: #111415;
+  --oc-role-surface-bright: #373a3b;
+  --oc-role-surface-container-lowest: #0c0f10;
+  --oc-role-surface-container-low: #191c1d;
+  --oc-role-surface-container: #1d2021;
+  --oc-role-surface-container-high: #272a2c;
+  --oc-role-surface-container-highest: #323537;
+  --oc-role-inverse-surface: #e1e3e4;
+  --oc-role-inverse-on-surface: #2e3132;
+  --oc-role-inverse-primary: #00677f;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 2px 10px rgba(0,0,0,.25);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;font-family:var(--oc-font-family);font-size:14px;line-height:1.45;
+  background:var(--oc-role-background);color:var(--oc-role-on-background);
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input,select{font:inherit;color:inherit}
+svg{display:block;flex:none}
+:focus-visible{outline:2px solid var(--oc-role-primary);outline-offset:2px;border-radius:4px}
+.sh{display:flex;flex-direction:column;height:100vh;min-height:0}
+.sh-top{
+  height:48px;flex:none;display:flex;align-items:center;gap:12px;padding:0 12px;
+  background:var(--oc-role-chrome);color:var(--oc-role-on-chrome);
+}
+.sh-top .brand{display:flex;align-items:center;gap:9px;font-weight:600;letter-spacing:.1px}
+.sh-top .spacer{flex:1}
+.sh-top .av{
+  width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.22);
+  display:grid;place-items:center;font-size:11px;font-weight:600
+}
+.sh-body{flex:1;display:flex;min-height:0}
+.sh-rail{
+  width:60px;flex:none;background:var(--oc-role-surface-container-low);
+  border-right:1px solid var(--oc-role-outline-variant);
+  display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:10px;
+}
+.sh-rail a{
+  width:44px;height:44px;border-radius:8px;display:grid;place-items:center;
+  color:var(--oc-role-on-surface-variant);text-decoration:none
+}
+.sh-rail a.on{background:var(--oc-role-secondary-container);color:var(--oc-role-on-secondary-container)}
+.app{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;background:var(--oc-role-background)}
+.tt{
+  position:fixed;right:12px;bottom:12px;z-index:50;display:flex;gap:2px;padding:3px;
+  border-radius:999px;background:var(--oc-role-surface-container-high);
+  border:1px solid var(--oc-role-outline-variant);box-shadow:var(--shadow);font-size:11px
+}
+.tt button{padding:4px 10px;border-radius:999px;color:var(--oc-role-on-surface-variant)}
+.tt button[aria-pressed=true]{background:var(--oc-role-secondary-container);color:var(--oc-role-on-secondary-container)}
+.btn{
+  display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:6px;
+  border:1px solid var(--oc-role-outline-variant);color:var(--oc-role-on-surface);
+  background:var(--oc-role-surface-container-low)
+}
+.btn:hover{background:var(--oc-role-surface-container-high)}
+.btn.pri{background:var(--oc-role-primary);color:var(--oc-role-on-primary);border-color:transparent}
+.btn.pri:hover{filter:brightness(1.06)}
+.btn.q{border-color:transparent;background:none}
+.btn.q:hover{background:var(--oc-role-surface-container-high)}
+.play{
+  width:36px;height:36px;border-radius:50%;display:grid;place-items:center;flex:none;
+  background:var(--oc-role-primary);color:var(--oc-role-on-primary)
+}
+.play.big{width:56px;height:56px}
+.play.ghost{background:var(--oc-role-surface-container-high);color:var(--oc-role-on-surface)}
+.mono{font-variant-numeric:tabular-nums}
+.dim{color:var(--oc-role-on-surface-variant)}
+.badge{
+  display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:999px;
+  font-size:11.5px;white-space:nowrap;border:1px solid transparent
+}
+.badge.live{background:var(--oc-role-primary-container);color:var(--oc-role-on-primary-container)}
+.badge.ok{border-color:var(--oc-role-outline-variant);color:var(--oc-role-on-surface-variant)}
+.badge.new{color:var(--oc-role-on-surface-variant);opacity:.75}
+.badge.bad{background:var(--oc-role-error-container);color:var(--oc-role-on-error-container)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+.logo{
+  width:34px;height:34px;border-radius:6px;flex:none;display:grid;place-items:center;
+  font-weight:600;font-size:13px;letter-spacing:-.2px;
+  background:var(--oc-role-surface-container-highest);color:var(--oc-role-on-surface-variant)
+}
+.logo.lg{width:56px;height:56px;border-radius:10px;font-size:19px}
+.logo.xl{width:104px;height:104px;border-radius:14px;font-size:34px}
+.sep{height:1px;background:var(--oc-role-outline-variant);border:0;margin:0}
+.scroll{overflow:auto;min-height:0}
+.scroll::-webkit-scrollbar{width:10px;height:10px}
+.scroll::-webkit-scrollbar-thumb{background:var(--oc-role-outline-variant);border-radius:6px;border:3px solid transparent;background-clip:content-box}
+.vol{display:flex;align-items:center;gap:8px;color:var(--oc-role-on-surface-variant)}
+.vol input{width:88px;accent-color:var(--oc-role-primary)}
+.note{
+  display:flex;gap:8px;padding:9px 12px;border-radius:8px;font-size:12.5px;
+  background:var(--oc-role-error-container);color:var(--oc-role-on-error-container)
+}
+.eq{display:flex;align-items:flex-end;gap:2px;height:14px}
+.eq i{width:3px;border-radius:1px;background:currentColor;transform-origin:bottom;animation:eq .9s ease-in-out infinite alternate}
+.eq i:nth-child(1){height:40%;animation-delay:-.1s}
+.eq i:nth-child(2){height:95%;animation-delay:-.45s}
+.eq i:nth-child(3){height:60%;animation-delay:-.3s}
+.eq i:nth-child(4){height:80%;animation-delay:-.6s}
+@keyframes eq{from{transform:scaleY(.35)}to{transform:scaleY(1)}}
+@media (prefers-reduced-motion:reduce){.eq i{animation:none}}
+
+
+.hd3{display:flex;align-items:center;gap:12px;padding:20px 26px 6px}
+.hd3 h1{margin:0;font-size:22px;font-weight:600}
+.chips{display:flex;gap:8px;flex-wrap:wrap;padding:10px 26px 16px}
+.chip{padding:5px 13px;border-radius:999px;font-size:12.5px;
+  border:1px solid var(--oc-role-outline-variant);color:var(--oc-role-on-surface-variant)}
+.chip.on{background:var(--oc-role-secondary-container);color:var(--oc-role-on-secondary-container);
+  border-color:transparent;font-weight:600}
+.tiles{display:grid;gap:14px;padding:0 26px 26px;
+  grid-template-columns:repeat(auto-fill,minmax(212px,1fr))}
+.tile{border:1px solid var(--oc-role-outline-variant);border-radius:12px;padding:16px;
+  background:var(--oc-role-surface-container-low);display:flex;flex-direction:column;gap:10px;position:relative}
+.tile:hover{background:var(--oc-role-surface-container-high)}
+.tile.on{border-color:var(--oc-role-primary);background:var(--oc-role-surface-container-high)}
+.tile h3{margin:0;font-size:15px;font-weight:600}
+.tile .s{font-size:12.5px;color:var(--oc-role-on-surface-variant)}
+.tile .row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto}
+.bar3{display:flex;align-items:center;gap:14px;padding:12px 26px;flex:none;
+  border-top:1px solid var(--oc-role-outline-variant);background:var(--oc-role-surface-container)}
+
+</style>
+</head>
+<body>
+<div class="sh">
+
+<header class="sh-top">
+  <span class="brand"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 9.5a2.5 2.5 0 110 5 2.5 2.5 0 010-5zm5.7-4.9l1.4 1.4a8 8 0 010 12l-1.4-1.4a6 6 0 000-9.2zm-11.4 0l1.4 1.4a6 6 0 000 9.2l-1.4 1.4a8 8 0 010-12zM20.5 2l1.4 1.4a12 12 0 010 17.2L20.5 19a10 10 0 000-15zM3.5 2L4.9 3.4a10 10 0 000 15L3.5 20A12 12 0 013.5 2z"/></svg><span>OpenCloud</span></span>
+  <span class="spacer"></span>
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10.5 3a7.5 7.5 0 015.9 12.1l4.3 4.3-1.4 1.4-4.3-4.3A7.5 7.5 0 1110.5 3zm0 2a5.5 5.5 0 100 11 5.5 5.5 0 000-11z"/></svg>
+  <span class="av">RS</span>
+</header>
+
+<div class="sh-body">
+
+<nav class="sh-rail" aria-label="Applications">
+  <a href="#" title="Files"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 4h6l2 2h10v14H3z"/></svg></a>
+  <a href="#" title="Shares"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3l5 5h-3v7h-4V8H7z"/><path d="M4 18h16v3H4z"/></svg></a>
+  <a href="#" title="Spaces"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 4h7v7H4zm9 0h7v7h-7zM4 13h7v7H4zm9 0h7v7h-7z"/></svg></a>
+  <a href="#" class="on" aria-current="page" title="Radio"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 9.5a2.5 2.5 0 110 5 2.5 2.5 0 010-5zm5.7-4.9l1.4 1.4a8 8 0 010 12l-1.4-1.4a6 6 0 000-9.2zm-11.4 0l1.4 1.4a6 6 0 000 9.2l-1.4 1.4a8 8 0 010-12zM20.5 2l1.4 1.4a12 12 0 010 17.2L20.5 19a10 10 0 000-15zM3.5 2L4.9 3.4a10 10 0 000 15L3.5 20A12 12 0 013.5 2z"/></svg></a>
+</nav>
+
+<main class="app">
+
+<div class="hd3">
+  <div style="flex:1"><h1>Favourites</h1>
+    <div class="dim" style="font-size:12.5px">Radio / Favourites.m3u8</div></div>
+  <button class="btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3v9l3.5-3.5 1.4 1.4L11 16 5.1 9.9l1.4-1.4L10 12V3z"/><path d="M4 18h16v3H4z"/></svg> Import</button>
+  <button class="btn pri"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg> Add station</button>
+</div>
+<div class="chips"><button class="chip on">All 12</button><button class="chip ">Ambient 4</button><button class="chip ">Eclectic 3</button><button class="chip ">Public 2</button><button class="chip ">Classical 1</button><button class="chip ">Jazz 1</button></div>
+<div class="scroll" style="flex:1"><div class="tiles"><article class="tile on">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+    <div class="logo lg">GS</div><span class="badge live"><span class="eq"><i></i><i></i><i></i><i></i></span>Playing</span></div>
+  <div><h3>Groove Salad</h3><div class="s">SomaFM · Ambient</div></div>
+  <div class="row"><span class="s mono">128 kbps AAC</span>
+    <button class="play " aria-label="Play Groove Salad"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3.4v14H7zM13.6 5H17v14h-3.4z"/></svg></button></div>
+</article><article class="tile ">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+    <div class="logo lg">DZ</div><span class="badge ok"><span class="dot"></span>Ready</span></div>
+  <div><h3>Drone Zone</h3><div class="s">SomaFM · Ambient</div></div>
+  <div class="row"><span class="s mono">128 kbps AAC</span>
+    <button class="play ghost" aria-label="Play Drone Zone"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L19 12z"/></svg></button></div>
+</article><article class="tile ">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+    <div class="logo lg">DS</div><span class="badge ok"><span class="dot"></span>Ready</span></div>
+  <div><h3>Deep Space One</h3><div class="s">SomaFM · Ambient</div></div>
+  <div class="row"><span class="s mono">128 kbps MP3</span>
+    <button class="play ghost" aria-label="Play Deep Space One"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L19 12z"/></svg></button></div>
+</article><article class="tile ">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+    <div class="logo lg">RP</div><span class="badge ok"><span class="dot"></span>Ready</span></div>
+  <div><h3>Radio Paradise Mellow</h3><div class="s">Radio Paradise · Eclectic</div></div>
+  <div class="row"><span class="s mono">320 kbps FLAC</span>
+    <button class="play ghost" aria-label="Play Radio Paradise Mellow"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L19 12z"/></svg></button></div>
+</article><article class="tile ">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+    <div class="logo lg">FI</div><span class="badge new">Not played yet</span></div>
+  <div><h3>FIP</h3><div class="s">Radio France · Eclectic</div></div>
+  <div class="row"><span class="s mono">192 kbps MP3</span>
+    <button class="play ghost" aria-label="Play FIP"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L19 12z"/></svg></button></div>
+</article><article class="tile ">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+    <div class="logo lg">KX</div><span class="badge new">Not played yet</span></div>
+  <div><h3>KEXP 90.3</h3><div class="s">Seattle · Public</div></div>
+  <div class="row"><span class="s mono">128 kbps MP3</span>
+    <button class="play ghost" aria-label="Play KEXP 90.3"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L19 12z"/></svg></button></div>
+</article><article class="tile ">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+    <div class="logo lg">N1</div><span class="badge new">Not played yet</span></div>
+  <div><h3>NTS 1</h3><div class="s">London · Eclectic</div></div>
+  <div class="row"><span class="s mono">128 kbps MP3</span>
+    <button class="play ghost" aria-label="Play NTS 1"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L19 12z"/></svg></button></div>
+</article><article class="tile ">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+    <div class="logo lg">WF</div><span class="badge bad">Blocked</span></div>
+  <div><h3>WFMU</h3><div class="s">Jersey City · Public</div></div>
+  <div class="row"><span class="s mono">128 kbps MP3</span>
+    <button class="play ghost" aria-label="Play WFMU"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L19 12z"/></svg></button></div>
+</article><article class="tile ">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+    <div class="logo lg">VC</div><span class="badge bad">No response</span></div>
+  <div><h3>Venice Classic</h3><div class="s">Venice · Classical</div></div>
+  <div class="row"><span class="s mono">128 kbps MP3</span>
+    <button class="play ghost" aria-label="Play Venice Classic"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L19 12z"/></svg></button></div>
+</article><article class="tile ">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+    <div class="logo lg">J24</div><span class="badge new">Not played yet</span></div>
+  <div><h3>Jazz24</h3><div class="s">KNKX · Jazz</div></div>
+  <div class="row"><span class="s mono">128 kbps AAC</span>
+    <button class="play ghost" aria-label="Play Jazz24"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L19 12z"/></svg></button></div>
+</article></div></div>
+<div class="bar3">
+  <button class="play" aria-label="Pause"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3.4v14H7zM13.6 5H17v14h-3.4z"/></svg></button>
+  <div style="flex:1;min-width:0"><b>Groove Salad</b> <span class="dim">· SomaFM</span>
+    <div class="dim" style="font-size:12px">Bluetech — Peace Officer</div></div>
+  <div class="vol"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9h3.5L12 5v14l-4.5-4H4z"/><path d="M15 9.2a4 4 0 010 5.6l1.4 1.4a6 6 0 000-8.4z"/></svg><input type="range" min="0" max="100" value="72" aria-label="Volume"></div>
+</div>
+</main>
+</div>
+</div>
+
+<div class="tt" role="group" aria-label="Theme">
+  <button data-mode="light" aria-pressed="false">Light</button>
+  <button data-mode="dark" aria-pressed="false">Dark</button>
+  <button data-mode="system" aria-pressed="true">System</button>
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  var q=new URLSearchParams(location.search).get('theme');
+  if(q==='dark'||q==='light')root.setAttribute('data-theme',q);
+  document.querySelectorAll('.tt button').forEach(function(b){
+    b.addEventListener('click',function(){
+      var m=b.dataset.mode;
+      if(m==='system')root.removeAttribute('data-theme');else root.setAttribute('data-theme',m);
+      document.querySelectorAll('.tt button').forEach(function(o){
+        o.setAttribute('aria-pressed',String(o.dataset.mode===m));
+      });
+    });
+  });
+})();
+
+</script>
+</body>
+</html>
