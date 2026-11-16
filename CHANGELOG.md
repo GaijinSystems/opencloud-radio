@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.2.1 — 2026-11-16
+
+Fixed
+
+- **A station logo that would not load left a broken or empty tile**, in the
+  list and in the player bar. Its initials are shown instead, as for a station
+  with no logo, and a different logo given to it later is tried afresh. Logos
+  come from playlists, the online directory and hand entry, and an address
+  that has since gone is common. Once an address has failed it is not asked
+  for again, by a row drawn anew or another station sharing it, until the
+  browser comes back online or the page is reloaded.
+- 524 tests, from 521.
+
 ## 1.2.0 — 2026-11-16
 
 A seventh pass over the whole tree, and an eighth over what was added after

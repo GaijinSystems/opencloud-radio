@@ -1,10 +1,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { nextTick } from 'vue'
+import { nextTick, reactive } from 'vue'
 import { mount, buttonNamed } from './support/mount'
 import ColumnChecklist from '../src/components/ColumnChecklist.vue'
 import ColumnsMenu from '../src/components/ColumnsMenu.vue'
 import StationTable from '../src/components/StationTable.vue'
 import StationRow from '../src/components/StationRow.vue'
+import StationLogo from '../src/components/StationLogo.vue'
 import PreferencesDialog from '../src/components/PreferencesDialog.vue'
 import SearchField from '../src/components/SearchField.vue'
 import ListDialog from '../src/components/ListDialog.vue'
@@ -469,6 +470,40 @@ describe('the station form on a playlist link', () => {
   it('says to use Import where this site does not, or for an ASX file it never reads', async () => {
     expect(await noteFor('https://x.example/live.pls', { readsPlaylists: false })).toContain('Use Import to read it')
     expect(await noteFor('https://x.example/live.asx')).toContain('Use Import to read it')
+  })
+})
+
+describe('a station logo that will not load', () => {
+  it('gives way to the initials, and another logo given later is tried afresh', async () => {
+    const props = reactive({ station: station({ logo: 'https://x.example/gone.png' }) })
+    const host = mount(StationLogo, props)
+    const img = host.querySelector('img') as HTMLImageElement
+    expect(img.getAttribute('src')).toBe('https://x.example/gone.png')
+    img.dispatchEvent(new Event('error'))
+    await nextTick()
+    expect(host.querySelector('img')).toBeNull()
+    expect(host.textContent).toContain('GS')
+    props.station = { ...props.station, logo: 'https://x.example/new.png' }
+    await nextTick()
+    expect(host.querySelector('img')?.getAttribute('src')).toBe('https://x.example/new.png')
+  })
+
+  it('is not asked for again: by a row drawn anew, or by another station sharing it', async () => {
+    const first = mount(StationLogo, { station: station({ logo: 'https://x.example/dead.png' }) })
+    const other = mount(StationLogo, { station: station({ id: 's2', name: 'Drone Zone', logo: 'https://x.example/dead.png' }) })
+    ;(first.querySelector('img') as HTMLImageElement).dispatchEvent(new Event('error'))
+    await nextTick()
+    expect(other.querySelector('img')).toBeNull() // already drawn, and turned to initials without asking
+    expect(mount(StationLogo, { station: station({ logo: 'https://x.example/dead.png' }) }).querySelector('img')).toBeNull()
+  })
+  it('is tried again when the browser comes back online: a dropped connection fails every logo at once', async () => {
+    const host = mount(StationLogo, { station: station({ logo: 'https://x.example/offline.png' }) })
+    ;(host.querySelector('img') as HTMLImageElement).dispatchEvent(new Event('error'))
+    await nextTick()
+    expect(host.querySelector('img')).toBeNull()
+    window.dispatchEvent(new Event('online'))
+    await nextTick()
+    expect(host.querySelector('img')?.getAttribute('src')).toBe('https://x.example/offline.png')
   })
 })
 

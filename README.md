@@ -17,7 +17,7 @@ From `source/`:
 ```
 npm install --legacy-peer-deps   # see note below
 npm run build                    # -> dist/, with a build stamp in manifest.json
-npm test                         # 521 tests, no server required
+npm test                         # 524 tests, no server required
 npm run check:types
 ```
 

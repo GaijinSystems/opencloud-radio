@@ -1,4 +1,4 @@
-# Installing OpenCloud Radio 1.2.0
+# Installing OpenCloud Radio 1.2.1
 
 The app is built from `source/` in one step, then copied into OpenCloud.
 
