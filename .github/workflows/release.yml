@@ -1,0 +1,322 @@
+# Template: .github/workflows/release.yml for a GaijinSystems repository.
+#
+# Tests every push to main. A version tag (v1.2.3) also builds the release files, publishes
+# them as a GitHub release, and (if the project has one) publishes the demo site on the
+# gh-pages branch, rebuilt from the tagged code.
+#
+# ---------------------------------------------------------------------------------------------
+# ADAPTING IT. Search for "PROJECT:" — those are the only places that differ between projects.
+# Everything else (the jobs that hold write access) should stay the same in every repository.
+#
+# What the repository provides:
+#
+#   main: scripts/release-notes.sh [version]    (path set in NOTES below)
+#       POSIX sh, no dependencies. Exits non-zero, with a message, unless the version is the
+#       same everywhere the project records it (package.json, __init__.py, INSTALL.txt, ...)
+#       and CHANGELOG.md has a non-empty "## <version>" section (a date may follow, after a
+#       space). Given a version, also fails unless that is the version. Prints the section:
+#       the release notes. Run it locally before tagging; this workflow runs it on every push.
+#
+#   main: the "PROJECT: build and test" steps of the test job, and the "PROJECT: package"
+#       step, which leaves the release files in release/ (nothing else there). This workflow
+#       writes a <file>.sha256 next to each. Make the files reproducible where possible: fixed
+#       order, owners, modes and times (tar --sort=name --owner=0 --group=0 --numeric-owner
+#       --mode=u+rwX,go+rX,go-w --mtime=@<commit time> -I 'gzip -9n'). A shell pipeline in a
+#       script run by `sh` has no pipefail: let tar run the compressor instead of piping.
+#
+#   gh-pages (only with a demo site): _demo/build.sh <source checkout> <output folder>
+#       Builds the site from the given checkout of main into the output folder (empty or not
+#       yet existing), and runs the demo's own checks; leaves the branch alone. Without the
+#       output folder it may build into the branch root, for building by hand. The site goes
+#       out through Jekyll, so: no `.nojekyll` on gh-pages; the demo's source lives in _demo/
+#       (Jekyll leaves out names starting with "_" or "."); no published file may start with
+#       "---" front matter; nothing the site needs may have a name Jekyll leaves out (checked
+#       below). gh-pages keeps README.md, CNAME, .gitignore and _demo/ as its own; everything
+#       else at its root is replaced by each release.
+#
+# No demo site: delete the demo-build and demo jobs, and demo-build from release's needs.
+#
+# Repository settings: Actions' default workflow
+# permissions read-only; ruleset force-push-disabled on main and gh-pages; ruleset
+# release-tags-locked on refs/tags/v* (deletion, update, non_fast_forward), which is what
+# makes "release tags cannot be moved or deleted" below true; Pages built from gh-pages /,
+# with a custom domain in gh-pages' CNAME and HTTPS enforced.
+#
+# Pin every action by commit SHA, with its tag in a comment, and every container image by
+# digest. Put build tools in containers (podman is on the runner) rather than on the runner.
+# ---------------------------------------------------------------------------------------------
+#
+# Releasing: set the version everywhere and add a "## 1.2.3 — <date>" section to CHANGELOG.md
+# in one commit (sh source/scripts/release-notes.sh checks them), push main, let its run pass, then:
+#     git tag v1.2.3 && git push origin v1.2.3
+#
+# Nothing is released unless the tests pass and the demo builds. If a later step fails, fix
+# the cause and use "Re-run failed jobs" (not "Re-run all jobs": the release would exist
+# already). Release tags cannot be moved or deleted, so a fix that needs a change on main
+# needs a new version, and so does a demo site that was built wrong (a re-run reuses the site
+# already built). The demo site is published only by the newest release, so re-running an
+# older one never puts its site back.
+name: test and release
+
+on:
+  push:
+    branches: [main]
+    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
+
+permissions:
+  contents: read
+
+env:
+  # PROJECT: the name in release titles and the demo site's commit message
+  PROJECT_NAME: OpenCloud Radio
+  # PROJECT: where the release-notes script is, from the repository root
+  NOTES: source/scripts/release-notes.sh
+  # PROJECT: node:22-alpine, by digest; gh-pages' _demo/build.sh uses it from here, keeping a
+  # copy of the pin only for builds by hand
+  NODE_IMAGE: docker.io/library/node:22-alpine@sha256:0e1754758c2df4cfa3e68d59e2e1b7374bb7fd9ea6328eaaacf15cc934af8202
+
+jobs:
+  # Checks, tests and builds; on a version tag, also makes the release files. Runs the
+  # project's own build and third-party packages, so it gets no write access at all.
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Check that the version is the same everywhere
+        run: sh "$NOTES" > /dev/null
+
+      # PROJECT: build and test. The app is built and tested in a container, from a copy of the
+      # repository mounted read-only (the tests also read deploy/): the tests, the type check,
+      # then the build, which goes to $RUNNER_TEMP/dist (the files of the app's radio/ folder).
+      - name: Build and test
+        run: |
+          mkdir "$RUNNER_TEMP/dist"
+          podman run --rm -e RADIO_COMMIT="${GITHUB_SHA::7}" -e SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)" \
+            -v "$PWD":/repo:ro -v "$RUNNER_TEMP/dist":/out "$NODE_IMAGE" sh -euc '
+              cp -a /repo/. /tmp/app && cd /tmp/app/source
+              npm ci --legacy-peer-deps --no-audit --no-fund
+              npm test
+              npm run check:types
+              npm run build
+              cp -r dist/. /out/'
+
+      # PROJECT: package. Put the release files, and nothing else, in release/: the built app as
+      # opencloud-radio-<version>.tar.gz, unpacking to radio/ as INSTALL step 1 describes.
+      - name: Make the release files
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          mkdir release
+          tar --sort=name --owner=0 --group=0 --numeric-owner --mode=u+rwX,go+rX,go-w \
+            --mtime="@$(git log -1 --format=%ct)" -I 'gzip -9n' --transform 's,^\.,radio,' \
+            -C "$RUNNER_TEMP/dist" -cf "release/opencloud-radio-${GITHUB_REF_NAME#v}.tar.gz" .
+      - name: Checksum the release files
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          cd release
+          for f in *; do
+            [ -f "$f" ] || { echo "::error::release/$f is not a file"; exit 1; }
+            sha256sum "$f" > "$f.sha256"
+          done
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          name: release-files
+          path: release/
+          if-no-files-found: error
+          retention-days: 30  # as long as GitHub allows a run to be re-run
+
+  # Builds the demo site from the tagged code with gh-pages' own _demo/build.sh, which also
+  # runs the demo's checks. It installs and runs third-party code, so it gets no write access
+  # either.
+  demo-build:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          path: src
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          ref: gh-pages
+          path: pages
+          persist-credentials: false
+      # PROJECT: anything the build needs first that main's checkout lacks (e.g. an artifact
+      # from an earlier job, downloaded into src/), or a runtime (setup-python, ...).
+      - name: Build the site
+        run: sh pages/_demo/build.sh "$PWD/src" site
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
+        with:
+          name: demo-site
+          path: site/
+          if-no-files-found: error
+          retention-days: 30
+
+  # Checks the tag and the release files, and publishes the release. Runs nothing but the
+  # project's release-notes script, from the tagged commit.
+  release:
+    needs: [test, demo-build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write  # to create the release
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          fetch-depth: 0  # to check that the tag is on main
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
+        with:
+          name: release-files
+          path: release
+      - name: Check the tag against main, the version and the release files, and publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          git merge-base --is-ancestor "$GITHUB_SHA" origin/main \
+            || { echo "::error::$GITHUB_REF_NAME is not on main"; exit 1; }
+          sh "$NOTES" "$version" > notes.md \
+            || { echo "::error::$GITHUB_REF_NAME does not match the version in the code, or the changelog lacks it"; exit 1; }
+          # every file comes with its checksum, and there is nothing else
+          files=()
+          while IFS= read -r -d '' f; do
+            case "$f" in
+              *.sha256) [ -f "release/${f%.sha256}" ] || { echo "::error::release/$f checks no file"; exit 1; } ;;
+              *) [ -f "release/$f.sha256" ] || { echo "::error::release/$f has no checksum"; exit 1; }
+                 files+=("release/$f" "release/$f.sha256") ;;
+            esac
+          done < <(find release -mindepth 1 -maxdepth 1 -type f -printf '%P\0')
+          [ "${#files[@]}" -gt 0 ] || { echo "::error::no release files"; exit 1; }
+          [ -z "$(find release -mindepth 1 ! -type f)" ] || { echo "::error::release/ holds more than files"; exit 1; }
+          (cd release && cat ./*.sha256 | sha256sum -c -)
+          gh release create "$GITHUB_REF_NAME" "${files[@]}" \
+            --verify-tag --title "$PROJECT_NAME $version" --notes-file notes.md
+
+  # Puts the built site on gh-pages and publishes it. Runs no downloaded code, and none from
+  # gh-pages either.
+  demo:
+    needs: [release, demo-build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30  # up to 1 + 10 minutes for the Pages build and 10 for the live check
+    permissions:
+      contents: write  # to push to gh-pages
+      pages: write     # to start the Pages build
+    concurrency:
+      group: gh-pages  # one push to gh-pages at a time, each from the latest gh-pages
+      cancel-in-progress: false
+      queue: max  # keep every waiting job: an older release's must not cancel a newer one's
+    steps:
+      - name: Leave the site to a newer release
+        id: newest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tags=$(gh release list -R "$GITHUB_REPOSITORY" --exclude-drafts --limit 1000 --json tagName -q '.[].tagName')
+          newest=$(printf '%s\n' "$tags" | sort -V | tail -n 1)
+          [ -n "$newest" ] || { echo "::error::could not list the releases"; exit 1; }
+          if [ "$newest" = "$GITHUB_REF_NAME" ]; then
+            echo "publish=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::$newest is newer than $GITHUB_REF_NAME; the site is left as it is"
+          fi
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        if: steps.newest.outputs.publish
+        with:
+          ref: gh-pages
+          path: pages
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
+        if: steps.newest.outputs.publish
+        with:
+          name: demo-site
+          path: site
+      - name: Commit and push to gh-pages
+        if: steps.newest.outputs.publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # the artifact comes from a job that ran downloaded code: files and folders only, none
+          # of the branch's own (.git, .gitignore, _demo/, README.md, CNAME; upload-artifact
+          # already leaves out hidden files), and no name Jekyll would leave out of the site
+          odd=$(find site -mindepth 1 \( \( ! -type f ! -type d \) -o -name '.*' -o -name '_*' \
+            -o -path site/README.md -o -path site/CNAME \
+            -o -name '#*' -o -name '~*' -o -name '*~' -o -name node_modules -o -name 'Gemfile*' \
+            -o -path site/vendor/bundle -o -path site/vendor/cache -o -path site/vendor/gems \
+            -o -path site/vendor/ruby \) -print)
+          [ -z "$odd" ] || { echo "::error::unexpected entries in the artifact: $(echo "$odd" | tr '\n' ' ')"; exit 1; }
+          [ -s site/index.html ] || { echo "::error::the artifact has no index.html"; exit 1; }
+          # Jekyll would process a file that begins with front matter (cmp, not $(head -c 3):
+          # command substitution warns about the null bytes in binary files)
+          find site -type f -print0 | while IFS= read -r -d '' f; do
+            ! cmp -s <(head -c 3 "$f") <(printf %s ---) || { echo "::error::$f begins with front matter, which Jekyll would process"; exit 1; }
+          done
+          # replace the previous build; keep the branch's own files, the same ones gh-pages'
+          # _demo/build.sh keeps when it builds into the branch
+          find pages -mindepth 1 -maxdepth 1 ! -name .git ! -name .gitignore ! -name _demo \
+            ! -name README.md ! -name CNAME -exec rm -r {} +
+          cp -r site/. pages/
+          cd pages
+          safe() { git -c core.hooksPath=/dev/null -c core.fsmonitor=false "$@"; }
+          safe add -A -- . ':(exclude)_demo'
+          if safe diff --cached --quiet; then
+            echo "The site is unchanged."
+            exit 0
+          fi
+          safe -c user.name=GaijinSystems -c user.email=17348508+GaijinSystems@users.noreply.github.com \
+            commit -q -m "Demo site, built from $PROJECT_NAME ${GITHUB_REF_NAME#v}"
+          safe push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:gh-pages
+      - name: Publish and check the site
+        if: steps.newest.outputs.publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # GitHub's documentation says a push made with this job's token starts no Pages build, but
+          # one may start anyway: give it a minute to appear, and request a build only if none did
+          commit=$(git -C pages rev-parse HEAD)
+          latest() { gh api "repos/$GITHUB_REPOSITORY/pages/builds/latest" --jq '.status + " " + .commit + " " + .created_at'; }
+          start=$(date -u +%FT%TZ)
+          seen=
+          for _ in $(seq 6); do
+            state=$(latest) || state=
+            case "$state" in "queued $commit "*|"building $commit "*|"built $commit "*) seen=1; break ;; esac
+            sleep 10
+          done
+          [ -n "$seen" ] || gh api -X POST "repos/$GITHUB_REPOSITORY/pages/builds" > /dev/null
+          built=
+          for _ in $(seq 60); do
+            state=$(latest) || state=
+            case "$state" in
+              "built $commit "*) built=1; break ;;
+              "errored $commit "*)  # an error from before this attempt is not this build's
+                [ "${state##* }" \< "$start" ] || { echo "::error::the Pages build of $commit failed"; exit 1; } ;;
+            esac
+            sleep 10
+          done
+          [ -n "$built" ] || { echo "::error::Pages did not finish building $commit in 10 minutes"; exit 1; }
+          # the live site serves exactly the files just published, and not _demo/; the CDN may
+          # keep old copies for up to 10 minutes (the query string only labels the requests: the
+          # CDN ignores it). File names may hold spaces and "#", so each is read whole and sent
+          # percent-encoded. Each round fetches again only what did not match yet.
+          domain=$(cat pages/CNAME)
+          url() { jq -rn --arg p "$1" '$p | split("/") | map(@uri) | join("/")'; }
+          same() { curl -sSf --max-time 30 "https://$domain/$(url "$1")?release=$commit" | cmp -s - "site/$1"; }
+          code() { curl -sS --max-time 30 -o /dev/null -w '%{http_code}' "https://$domain/$1?release=$commit"; }
+          mapfile -d '' pending < <(cd site && find . -type f -printf '%P\0')
+          for _ in $(seq 40); do
+            left=()
+            for f in "${pending[@]}"; do same "$f" || left+=("$f"); done
+            pending=("${left[@]}")
+            bad=
+            for f in "${pending[@]}"; do bad="$bad [$f]"; done
+            [ "$(code "")" = 200 ] || bad="$bad /"
+            [ "$(code _demo/build.sh)" = 404 ] || bad="$bad _demo/"
+            [ -z "$bad" ] && exit 0
+            sleep 15
+          done
+          echo "::error::not as published:$bad"
+          exit 1

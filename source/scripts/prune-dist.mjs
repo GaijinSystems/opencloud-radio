@@ -27,7 +27,12 @@ const commit = process.env.RADIO_COMMIT || (() => {
 })()
 
 const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
-manifest.build = { commit, builtAt: new Date().toISOString() }
+// The time of the commit where the build is given one (SOURCE_DATE_EPOCH, as
+// the release workflow sets it), so a release's files are the same each time
+// they are built; otherwise, now.
+const epoch = Number(process.env.SOURCE_DATE_EPOCH)
+const builtAt = new Date(Number.isFinite(epoch) && epoch > 0 ? epoch * 1000 : Date.now()).toISOString()
+manifest.build = { commit, builtAt }
 
 // Defaults shipped with the app, from the same file the app itself reads, so
 // the manifest cannot drift from the code. An administrator overrides these in

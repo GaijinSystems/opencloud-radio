@@ -1,6 +1,6 @@
 {
   "name": "radio",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Internet radio player for OpenCloud Web",
   "license": "AGPL-3.0-or-later",
   "type": "module",

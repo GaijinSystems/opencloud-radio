@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.2.2 — 2026-11-17
+
+The app is unchanged from 1.2.1; this is the first release built and published
+by the repository's own workflow.
+
+- **Each release on GitHub carries the built app**, as
+  `opencloud-radio-<version>.tar.gz` with its `.sha256`, unpacking to the
+  `radio/` folder INSTALL step 1 describes: no build is needed to install it.
+- Every push to `main` is tested; a version tag also builds the release and
+  rebuilds the demo site from the tagged code. `CONTENTS.md` says how to
+  release. A release's files are the same each time they are built: its
+  manifest records the commit's time as the build time.
+
 ## 1.2.1 — 2026-11-16
 
 Fixed
