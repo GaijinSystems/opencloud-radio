@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.2.3 — 2026-11-22
+
+The app's code is unchanged from 1.2.2.
+
+- **Each release also carries the built app as a `.zip`**,
+  `opencloud-radio-<version>.zip`, the format OpenCloud's app store
+  downloads, unpacking to the same `radio/` folder as the `.tar.gz`. Both are
+  reproducible.
+- **OpenCloud 7.2.5 or newer is required**, now stated in the README, which
+  lists the versions the app was run against (7.2.5, 8.1.0, 9.1.0, 9.2.0).
+  On 6.0.0 the first list a user creates on a fresh installation cannot be
+  opened at once, so it is not supported.
+- The app's `manifest.json` names its author, GaijinSystems.
+
 ## 1.2.2 — 2026-11-17
 
 The app is unchanged from 1.2.1; this is the first release built and published

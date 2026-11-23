@@ -93,8 +93,11 @@ jobs:
       # then the build, which goes to $RUNNER_TEMP/dist (the files of the app's radio/ folder).
       - name: Build and test
         run: |
+          # the commit's time: the build time stamped into the app, and the archives' times
+          SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)
+          echo "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH" >> "$GITHUB_ENV"
           mkdir "$RUNNER_TEMP/dist"
-          podman run --rm -e RADIO_COMMIT="${GITHUB_SHA::7}" -e SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)" \
+          podman run --rm -e RADIO_COMMIT="${GITHUB_SHA::7}" -e SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" \
             -v "$PWD":/repo:ro -v "$RUNNER_TEMP/dist":/out "$NODE_IMAGE" sh -euc '
               cp -a /repo/. /tmp/app && cd /tmp/app/source
               npm ci --legacy-peer-deps --no-audit --no-fund
@@ -104,14 +107,23 @@ jobs:
               cp -r dist/. /out/'
 
       # PROJECT: package. Put the release files, and nothing else, in release/: the built app as
-      # opencloud-radio-<version>.tar.gz, unpacking to radio/ as INSTALL step 1 describes.
+      # opencloud-radio-<version>.zip (what OpenCloud's app store downloads) and .tar.gz, each
+      # unpacking to radio/ as INSTALL step 1 describes. Both are reproducible: fixed order,
+      # modes and times (the commit's). The zip is made from the .tar.gz, unpacked, so the
+      # two hold the same files and modes; zip keeps the commit's time to its own 2-second
+      # precision, as local time, hence TZ=UTC.
       - name: Make the release files
         if: startsWith(github.ref, 'refs/tags/v')
         run: |
+          set -o pipefail  # a failed find must not leave a partial zip
           mkdir release
+          version="${GITHUB_REF_NAME#v}"
           tar --sort=name --owner=0 --group=0 --numeric-owner --mode=u+rwX,go+rX,go-w \
-            --mtime="@$(git log -1 --format=%ct)" -I 'gzip -9n' --transform 's,^\.,radio,' \
-            -C "$RUNNER_TEMP/dist" -cf "release/opencloud-radio-${GITHUB_REF_NAME#v}.tar.gz" .
+            --mtime="@$SOURCE_DATE_EPOCH" -I 'gzip -9n' --transform 's,^\.,radio,' \
+            -C "$RUNNER_TEMP/dist" -cf "release/opencloud-radio-$version.tar.gz" .
+          mkdir "$RUNNER_TEMP/zip" && tar -xpzf "release/opencloud-radio-$version.tar.gz" -C "$RUNNER_TEMP/zip"
+          cd "$RUNNER_TEMP/zip"
+          find radio | LC_ALL=C sort | TZ=UTC zip -X -9 -q -@ "$GITHUB_WORKSPACE/release/opencloud-radio-$version.zip"
       - name: Checksum the release files
         if: startsWith(github.ref, 'refs/tags/v')
         run: |

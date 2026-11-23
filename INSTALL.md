@@ -1,4 +1,4 @@
-# Installing OpenCloud Radio 1.2.2
+# Installing OpenCloud Radio 1.2.3
 
 The app is built from `source/` in one step, then copied into OpenCloud.
 
@@ -15,10 +15,12 @@ docs/                        the directory plan, layout mockups
 
 Or skip the build: each release on GitHub
 (<https://github.com/GaijinSystems/opencloud-radio/releases>) carries the
-built app as `opencloud-radio-<version>.tar.gz`, with its `.sha256`
-(`sha256sum -c opencloud-radio-<version>.tar.gz.sha256` checks it). It unpacks
-to `radio/`, the folder described below, so it goes straight into the apps
-asset path: `tar xzf opencloud-radio-<version>.tar.gz -C "$WEB_ASSET_APPS_PATH"`.
+built app as `opencloud-radio-<version>.zip` and `.tar.gz`, each with its
+`.sha256` (`sha256sum -c <file>.sha256` checks it).
+Both unpack to `radio/`, the folder described below, so they go straight into
+the apps asset path: `tar xzf opencloud-radio-<version>.tar.gz -C "$WEB_ASSET_APPS_PATH"`
+(or `unzip -o -d "$WEB_ASSET_APPS_PATH" opencloud-radio-<version>.zip`). OpenCloud
+7.2.5 or newer is required (README, *Install*).
 When upgrading, remove the old `radio/js` and `radio/assets` first, as under
 **Upgrading** below.
 

@@ -1,8 +1,9 @@
 {
   "name": "radio",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Internet radio player for OpenCloud Web",
   "license": "AGPL-3.0-or-later",
+  "author": "GaijinSystems",
   "type": "module",
   "private": true,
   "scripts": {

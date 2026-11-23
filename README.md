@@ -35,8 +35,19 @@ OC_USER=alice OC_PASSWORD=… node source/scripts/dav-contract.mjs https://cloud
 
 ## Install
 
-Build it (above, or with podman as INSTALL step 1 shows), then copy
-`source/dist/` to `$WEB_ASSET_APPS_PATH/radio/`. Apps in that directory are
+**Requires OpenCloud 7.2.5 or newer.** Version 1.2.2 was run against OpenCloud
+7.2.5 (stable) and 8.1.0, 9.1.0 and 9.2.0 (rolling) in headless Chromium, each
+a fresh installation, logged in for the first time, with `media-src` and
+`connect-src` opened to `https:` and a local test station: the app loads, the
+first "Add station" creates the `Radio/` folder and a list, the list is saved
+and shows in Files, the station plays, and its title shows. On 6.0.0 that
+first list is created but cannot be opened at once, so 6.0.0 is not
+supported; no other versions were tried.
+
+Download `opencloud-radio-<version>.zip` (or `.tar.gz`) from the
+[releases](https://github.com/GaijinSystems/opencloud-radio/releases), or build
+it (above, or with podman as INSTALL step 1 shows); either way the app is a
+`radio/` folder for `$WEB_ASSET_APPS_PATH/radio/`. Apps in that directory are
 discovered automatically — there is no apps list to edit. **OpenCloud's default
 policy is `media-src 'self'`, which blocks every stream**; add `https:` to it
 via the proxy service's CSP file — see [`deploy/csp.yaml`](deploy/csp.yaml).
